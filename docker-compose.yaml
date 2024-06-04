@@ -4,7 +4,7 @@ services:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
-      - /mnt/gallery/homeassistant:/config
+      - /home/gie/docker-compose/homeassistant:/config
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
       - /mnt/Multimedia:/media
@@ -22,7 +22,7 @@ services:
     ports:
       - "6052:6052"
     volumes:
-      - /mnt/gallery/esphome:/config:rw
+      - /home/gie/docker-compose/esphome:/config:rw
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     environment:
@@ -41,7 +41,7 @@ services:
       vpcbr:
         ipv4_address: 172.26.0.3  
     volumes:
-      - /mnt/gallery/nodered:/data
+      - /home/gie/docker-compose/nodered:/data
       - /etc/localtime:/etc/localtime:ro
 
 networks:
