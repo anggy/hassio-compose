@@ -1,0 +1,53 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - /mnt/gallery/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+      - /mnt/Multimedia:/media
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - "8123:8123"
+    networks:
+      vpcbr:
+        ipv4_address: 172.26.0.4
+    
+  esphome:
+    container_name: esphome
+    image: esphome/esphome
+    ports:
+      - "6052:6052"
+    volumes:
+      - /mnt/gallery/esphome:/config:rw
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    environment:
+      - ESPHOME_DASHBOARD_USE_PING=true
+    networks:
+      vpcbr:
+        ipv4_address: 172.26.0.2
+
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=Asia/Jakarta
+    ports:
+      - "1880:1880"
+    networks:
+      vpcbr:
+        ipv4_address: 172.26.0.3  
+    volumes:
+      - /mnt/gallery/nodered:/data
+      - /etc/localtime:/etc/localtime:ro
+
+networks:
+ vpcbr:
+   driver: bridge
+   ipam:
+    config:
+      - subnet: 172.26.0.0/16
+        gateway: 172.26.0.1
